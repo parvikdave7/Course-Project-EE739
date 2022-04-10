@@ -3,6 +3,13 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 package intermediate_reg is 
+    component reg_gen is
+        generic ( data_width : integer);
+        port(
+            clk, ena, clr: in std_logic;
+            Din: in std_logic_vector(data_width-1 downto 0);
+            Dout: out std_logic_vector(data_width-1 downto 0));
+    end component;
     component IF_ID is 
     port(clk: in std_logic;
         clear: in std_logic;
@@ -113,7 +120,7 @@ package intermediate_reg is
             cl_sig_in : in std_logic_vector(12 downto 0);
             do1_in: in std_logic_vector(15 downto 0);
             do2_in: in std_logic_vector(15 downto 0);
-            mem_data_in: in std_logic_vector(15 downto 0)
+            mem_data_in: in std_logic_vector(15 downto 0);
             alu_out_in: in std_logic_vector(15 downto 0);
             disable : in std_logic;
             
@@ -264,7 +271,7 @@ entity RR_EX is
         cl_sig_out : out std_logic_vector(12 downto 0);
         do1_out: out std_logic_vector(15 downto 0);
         do2_out: out std_logic_vector(15 downto 0));
-end RR_EX;
+end entity;
 
 architecture Behavioural_RREX of RR_EX is
 
@@ -339,7 +346,7 @@ entity EX_MA is
             do1_out: out std_logic_vector(15 downto 0);
             do2_out: out std_logic_vector(15 downto 0);
             alu_out_out: out std_logic_vector(15 downto 0));
-end EX_MA;
+end entity;
 
 architecture Behavioural_EXMA of EX_MA is
 
@@ -396,7 +403,7 @@ entity MA_WB is
         cl_sig_in : in std_logic_vector(12 downto 0);
         do1_in: in std_logic_vector(15 downto 0);
         do2_in: in std_logic_vector(15 downto 0);
-        mem_data_in: in std_logic_vector(15 downto 0)
+        mem_data_in: in std_logic_vector(15 downto 0);
         alu_out_in: in std_logic_vector(15 downto 0);
         disable : in std_logic;
         
@@ -411,7 +418,7 @@ entity MA_WB is
         do2_out: out std_logic_vector(15 downto 0);
         alu_out_out: out std_logic_vector(15 downto 0);
         mem_data_out: out std_logic_vector(15 downto 0));
-end MA_WB;
+end entity;
 
 architecture Behavioural_EXMA of EX_MA is
 
