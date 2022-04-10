@@ -139,6 +139,10 @@ package intermediate_reg is
     end component;
 end package;
 
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
 entity IF_ID is
     port(clk: in std_logic;
 	clear: in std_logic;pc_in: in std_logic_vector(15 downto 0);
@@ -151,6 +155,14 @@ entity IF_ID is
 end entity;
 
 architecture Behavioural_IFID of IF_ID is
+    component reg_gen is
+        generic ( data_width : integer);
+        port(
+            clk, ena, clr: in std_logic;
+            Din: in std_logic_vector(data_width-1 downto 0);
+            Dout: out std_logic_vector(data_width-1 downto 0));
+    end component;
+
     signal ena : std_logic := '1';
     begin
         ena <= not disable;
@@ -167,6 +179,10 @@ architecture Behavioural_IFID of IF_ID is
         port map(clk => clk, ena => ena, Din => pc_inc_in, Dout => pc_inc_out, clr => clear);
 
 end architecture;
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity ID_RR is
     port(clk: in std_logic;
@@ -199,6 +215,13 @@ end entity;
 
 architecture Behavioural_IDRR of ID_RR is
     signal ena : std_logic := '1';
+    component reg_gen is
+        generic ( data_width : integer);
+        port(
+            clk, ena, clr: in std_logic;
+            Din: in std_logic_vector(data_width-1 downto 0);
+            Dout: out std_logic_vector(data_width-1 downto 0));
+    end component;
     begin
         ena <= not disable;
 
@@ -244,6 +267,10 @@ architecture Behavioural_IDRR of ID_RR is
 
 end Behavioural_IDRR ; -- Behavioural_IDRR
 
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
 entity RR_EX is
     port(clk: in std_logic;
         clear: in std_logic;
@@ -276,6 +303,13 @@ end entity;
 architecture Behavioural_RREX of RR_EX is
 
     signal ena : std_logic := '1';
+    component reg_gen is
+        generic ( data_width : integer);
+        port(
+            clk, ena, clr: in std_logic;
+            Din: in std_logic_vector(data_width-1 downto 0);
+            Dout: out std_logic_vector(data_width-1 downto 0));
+    end component;
     begin
         ena <= not disable;
         lm_sm_en <= (ena or lm_sm_en);
@@ -322,6 +356,10 @@ architecture Behavioural_RREX of RR_EX is
 
 end Behavioural_RREX ; -- Behavioural_RREX
 
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
 entity EX_MA is
     port(clk: in std_logic;
             clear: in std_logic;
@@ -351,6 +389,13 @@ end entity;
 architecture Behavioural_EXMA of EX_MA is
 
     signal ena : std_logic := '1';
+    component reg_gen is
+        generic ( data_width : integer);
+        port(
+            clk, ena, clr: in std_logic;
+            Din: in std_logic_vector(data_width-1 downto 0);
+            Dout: out std_logic_vector(data_width-1 downto 0));
+    end component;
     begin
         ena <= not disable;
 
@@ -392,6 +437,10 @@ architecture Behavioural_EXMA of EX_MA is
 
 end Behavioural_EXMA ; -- Behavioural_EXMA
 
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
 entity MA_WB is
     port(clk: in std_logic;
         clear: in std_logic;
@@ -423,6 +472,13 @@ end entity;
 architecture Behavioural_EXMA of EX_MA is
 
     signal ena : std_logic := '1';
+    component reg_gen is
+        generic ( data_width : integer);
+        port(
+            clk, ena, clr: in std_logic;
+            Din: in std_logic_vector(data_width-1 downto 0);
+            Dout: out std_logic_vector(data_width-1 downto 0));
+    end component;
     begin
         ena <= not disable;
 
