@@ -51,13 +51,6 @@ port(
 
 end component;
 
-component subtractor is
-    Port ( x : in STD_LOGIC_VECTOR (15 downto 0);
-           y : in STD_LOGIC_VECTOR (15 downto 0);
-           diff : out STD_LOGIC_VECTOR (15 downto 0);
-           bout : out STD_LOGIC);
-end component;
-
 component nand_16bit is
     Port ( x : in STD_LOGIC_VECTOR (15 downto 0);
            y : in STD_LOGIC_VECTOR (15 downto 0);
@@ -71,29 +64,25 @@ component xor_16bit is
 end component;
 
 
-component inverter is
-    Port ( x : in STD_LOGIC_VECTOR (15 downto 0);
-           y : out STD_LOGIC_VECTOR (15 downto 0));
-end component;
 signal t1,t2,t3,t4: STD_LOGIC_VECTOR(15 downto 0);
 signal c1,c2: STD_LOGIC;
 begin
 signed_addition: KS_Adder port map(x => A, y => B, sum => t1, cin => '0', cout => c1);
-subtraction: subtractor port map(x => A, y => B, diff => t2, bout => c2);
+
 nand16bit: nand_16bit port map(x => A, y => B, z => t3);
 xor16bit: xor_16bit port map(x => A, y => B, z => t4);
 process_ALU : process(A,B,sel) is
 begin
-    if(sel = "00") then
+    if(sel = "10") then
         R <= t1;
         c <= c1;
-    elsif (sel = "01") then
-        R <= t2;
-        c <= c2;
-    elsif (sel = "10") then
+    elsif (sel = "00") then
         R <= t3;
-    else
+    elsif (sel = "01") then
         R <= t4;
+    else 
+        R <= t1;
+        c <= c1;
     end if;            
     if (R = "0000000000000000") then 
         z <= '1';

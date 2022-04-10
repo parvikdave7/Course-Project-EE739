@@ -44,7 +44,6 @@ package intermediate_reg is
             ar1_out: out std_logic_vector(2 downto 0);
             ar2_out: out std_logic_vector(2 downto 0);
             ar3_out: out std_logic_vector(2 downto 0);
-			inst_out: out std_logic_vector(15 downto 0);
             lm_sm_out : out std_logic_vector(7 downto 0);
             opcode_out: out std_logic_vector(3 downto 0);
             immediate_out: out std_logic_vector(15 downto 0);
@@ -205,7 +204,6 @@ entity ID_RR is
         ar1_out: out std_logic_vector(2 downto 0);
         ar2_out: out std_logic_vector(2 downto 0);
         ar3_out: out std_logic_vector(2 downto 0);
-        inst_out: out std_logic_vector(15 downto 0);
         lm_out : out std_logic_vector(7 downto 0);
         opcode_out: out std_logic_vector(3 downto 0);
         immediate_out: out std_logic_vector(15 downto 0);

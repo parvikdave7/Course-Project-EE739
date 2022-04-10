@@ -49,10 +49,17 @@ end decoder;
 architecture Behavioral of decoder is
 
 signal ra, rb, rc : STD_LOGIC_VECTOR(2 downto 0);
-
-
+signal imm6 : STD_LOGIC_VECTOR(5 downto 0) := instr(5 downto 0);
+signal imm9 : STD_LOGIC_VECTOR(8 downto 0) := instr(8 downto 0);
+signal z7 : STD_LOGIC_VECTOR(6 downto 0) := "0000000";
+signal sgn_ext_6 : STD_LOGIC_VECTOR(15 downto 0);
+signal sgn_ext_9 : STD_LOGIC_VECTOR(15 downto 0);
+signal lhi_opr : STD_LOGIC_VECTOR(15 downto 0); 
 begin
-    
+    sgn_ext_6 <= (15 downto 6 => imm6(5)) & imm6;
+    sgn_ext_9 <= (15 downto 9 => imm9(8)) & imm9;
+    lhi_opr(15 downto 7) <= imm9;
+    lhi_opr(6 downto 0) <= z7;
     ra <= instr(11 downto 9);
     rb <= instr(8 downto 6);
     rc <= instr(5 downto 3);
@@ -79,7 +86,7 @@ begin
 		-- Conditional Settings
 		case instr(15 downto 12) is
 			when "0000" =>  		--Add immediate
-	            SGN_EXT <= '1';
+	            operand <= sgn_ext_6;
 				AR1 <= ra;
 				AR2 <= "---";
 				AR3 <= rb;
@@ -107,6 +114,7 @@ begin
 			     when others => 
              end case;
 			when "0011" =>			--LHI
+			operand <= lhi_opr;
 			LS_PC <= '1';
 			WB_mux <= "01";
 			ALU_C <= "--";
@@ -120,12 +128,12 @@ begin
 				AR1 <= rb;
 				LW <= '1';
 				AR2 <= "---";
-				SGN_EXT <= '1';
+				operand <= sgn_ext_6;
 				WB_mux <= "11";
 				valid <= "101";
 				
 			when "0101" => 			--SW
-			    SGN_EXT <= '1';
+			    operand <= sgn_ext_6;
 				WB_mux <= "--";
 				WR_en <= "01";
 				AR1 <= rb;
@@ -142,14 +150,13 @@ begin
 				
 			when "1101" =>			--SM
 				SM <= '1';
-				WB_mux <= "---";
+				WB_mux <= "--";
 				WR_en <= "01";
 				AR2 <= "---";
 				AR3 <= "---";
 				valid <= "110";
 				
 			when "1000" =>			--BEQ
-				SGN_EXT <= '1';
 				LS_PC <= '0';
 				BEQ <= '1';
 				WB_mux <= "---";
@@ -161,21 +168,18 @@ begin
 			when "1001" =>			--JAL
 				ID_PC <= '1';
 				LS_PC <= '0';
-				WB_mux <= "011";
+				WB_mux <= "10";
 				ALU_C <= "--";
-				Flag_C <= "000";
-				WR <= "10";
+				WR_en <= "10";
 				AR1 <= "---";
 				AR2 <= "---";
 				AR3 <= RA;
 				valid <= "001";
 				
 			when "1010" =>			--JLR
-				SE_DO2 <= '-';
-				WB_mux <= "011";
+				WB_mux <= "10";
 				ALU_C <= "--";
-				Flag_C <= "000";
-				WR <= "10";
+				WR_en<= "10";
 				AR1 <= RB;
 				AR2 <= "---";
 				AR3 <= RA;
@@ -184,6 +188,12 @@ begin
 		    when "1110" =>          -- LA
 		    when "1111" =>          -- SA
 			when "1011" =>          -- JRI
+			    operand <= sgn_ext_9;
+			    ALU_C <= "10";
+			    AR1 <= ra;
+			    AR2 <= "---";
+			    AR3 <= ra;
+			    valid <= "101";
 			when others =>
 		end case;
 	end process;
